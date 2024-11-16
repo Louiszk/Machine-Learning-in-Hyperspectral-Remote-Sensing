@@ -1,0 +1,83 @@
+Q2.1 (3 pts) In which regions are the bad bands located? What are possible reasons for their quality issues?
+Answer:
+From the first plot you can see the bad bands in 4 regions:
+- 385 - 405 nm (3 bands) [315 - 400 nm UV-A]
+- 1323 - 1453 nm (15 bands) [Near Infrared / SWIR]
+- 1782 - 2018 nm (27 bands) [Middle Infrared / SWIR]
+- 2457 - 2497 nm (5 bands) [Middle Infrared / SWIR]
+
+At the boundaries of the sensor's operational spectral range, the signal strength tends to decrease.
+This would explain the increased noise in the first three and last five bands; addtionally gases like CO2 or oxygen could absorb radiation.
+Another concern is water vapor absorbation, especially in the regions ~1400 and ~1900 nm, which correspond to the bad bands in the data.
+
+Q2.2 (1 pt) What is the original spectral resolution of the data?
+Answer:
+(2500 nm - 385 nm) / 222 = 9.527 nm
+
+Q2.3 (1 pt) What are the ranges of the returned index values? Which (statistical) distribution do they have?
+Answer:
+NDRE: 0.1418 - 0.3318 ; REIP: 710.1558 - 719.7072  (Distributions plotted)
+NDRE looks like a normal distribution
+For REIP, it looks more like some right skewed distribution   
+
+Q2.4: Describe the performance of the two indices as indicators of leaf nitrogen.
+ Which one is apparently more suitable? How do you judge their overall performance?
+Answer:
+There seems to be some positive correlation on the plots, but both are still pretty scattered.
+ Both NDRE and REIP reach an R2 score of 0.46 (NDRE 0.4636 , REIP 0.4634).
+This gives both indices a moderate positive correlation with leaf nitrogen, meaning they only partially reflect it.
+Neither NDRE nor REIP stands out as a clearly stronger indicator here; they lack the strength needed for precise assessments of leaf nitrogen.
+
+Q2.5 (3 pts) Leaf nitrogen was measured as percentage of the leaf dry weight. Is this a suitable metric for
+spectral analyses? Suggest some improvements for future data acquisitions and analyses.
+Answer:
+Measuring leaf nitrogen as a percentage of dry weight works but has its limitations.
+Spectral analysis is influenced by factors such as leaf structure/thickness, water content, and chlorophyll concentration.
+It is not directly accounted for these variables, particularly leaf area or water content.
+This can impact reflectance and reduce the accuracy of predictions from spectral indices (e.g. NDRE and REIP).
+
+Future data acquisitions and analyses could include some of these variables;
+e.g. leaf area-based nitrogen content, water content, chlorophyll concentration.
+
+Additionally collecting data across different growth stages (times of the year)
+or varied environmental conditions might improve the robustness of nitrogen predictions
+
+Q2.6 (2 pts) How do the degree of the polynom and the window size affect the outcome? Vary the polynom
+(e.g. 2nd degree, 4th degree, etc.) and the window size and compare the results. Which differences become
+apparent?
+Answer:
+Higher degree polynomials are more complex, can capture more finer details in the data but tend to overfit, learning and introducing artifacts/noise.
+ e.g. three out of four points in a straight line are fitted by p=1 and correctly overlay the fourth, but p=3 misses the fourth completely
+Lower degree polynomial might miss finer details but fit the underlying trend and are not prone to overfitting
+
+The window size determines how much neighboring data is considered for each point.
+A larger window size smooths the data more, reducing noise/fluctuations but potentially losing finer details.
+A smaller window size preserves more local variations, but might not effectively remove noise.
+
+Q2.7 (1 pt) Repeat the comparison of the index values to the leaf nitrogen values. Does the smoothing
+change the result? Did the performance of the two indicators improve?
+Answer:
+Yes, the smoothing changed the results, NDRE improved to R2=0.48 but the R2 of REIP decreased to 0.43 
+
+Q2.8 (2 pts) What is the range of the wavelength position of the 1st order derivative? Compare it to the REIP.
+Is this position of the 1st derivative maximum in line with the red edge infection point? If not, how do they
+differ in their assessments?
+Answer:
+REIP2: 712.1339 - 721.2637 1st Derivative: 706 - 719 (Distributions plotted)
+It seems like the position/distribution of the 1st derivative maximum/s is shifted around 4nm to the left (lower wavelengths) compared to the REIP.
+This suggests that the 1st derivative maximum tends to capture earlier changes in reflectance (where the spectral curve begins to increase significantly).
+
+Q2.9 (6 pts) Implement this work flow in your environment. How do you do it? Which polynom and window
+size did you choose and how did you come to this parameterization? Provide a plot of a smoothed and
+original pixel spectrum to visualize your results.
+Answer:
+My implementation is in smoothing_image_data.py. 
+I tried different window and polynom sizes and plotted the results for the noisy first band;
+p=2 seems to be sufficient, with a window size between 80 and 130 producing good images.
+Higher polynomials and lower window sizes introduce more noise, while higher window sizes smooth too much.
+
+
+
+
+
+
